@@ -34,12 +34,12 @@ def generate_stairway_rules(code_max, n_max, n_generate, log_oper_choice=["and",
         n_items = randint(2,n_max)
         items = []
         for i in range(0,n_items):
-            items.append( i+j )
+            items.append(i + j)
         rule = {
               'if':{
                   log_oper:	 items
                },
-               'then':i+j+1
+               'then':i + j + 1
             }
         rules.append(rule)
     shuffle(rules)
@@ -101,6 +101,17 @@ def generate_rand_facts(code_max, M):
     return facts
 
 
+
+
+
+
+
+
+
+
+
+
+
 #samples:
 print(generate_simple_rules(100, 4, 10))
 print(generate_random_rules(100, 4, 10))
@@ -113,14 +124,12 @@ N = 100000
 M = 1000
 rules = generate_simple_rules(100, 4, N)
 facts = generate_rand_facts(100, M)
-print("%d rules generated in %f seconds" % (N,time()-time_start))
+print("%d rules generated in %f seconds" % (N, time()-time_start))
 
-#load and validate rules
-# YOUR CODE HERE
-
-#check facts vs rules
 time_start = time()
-
+res = result(facts, rules)
+time_result = time() - time_start
+print(res)
 # YOUR CODE HERE
 
-print("%d facts validated vs %d rules in %f seconds" % (M,N,time()-time_start))
+print("%d facts validated vs %d rules in %f seconds" % (M, N, time_result))
