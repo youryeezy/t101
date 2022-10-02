@@ -127,9 +127,9 @@ facts = generate_rand_facts(100, M)
 print("%d rules generated in %f seconds" % (N, time()-time_start))
 
 time_start = time()
-res = result(facts, rules)
-time_result = time() - time_start
-print(res)
+
+#time_result = time() - time_start
+#print(res)
 # YOUR CODE HERE
 
-print("%d facts validated vs %d rules in %f seconds" % (M, N, time_result))
+#print("%d facts validated vs %d rules in %f seconds" % (M, N, time_result))
