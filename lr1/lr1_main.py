@@ -24,10 +24,15 @@ def generate_simple_rules(code_max, n_max, n_generate, log_oper_choice=["and","o
 
 
 def generate_seq_facts(M):
-    facts = list(range(0,M))
+    facts = list(range(0, M))
     shuffle(facts)
     return facts
 
+def generate_rand_facts(code_max, M):
+    facts = []
+    for i in range(0, M):
+        facts.append(randint(0, code_max))
+    return facts
 
 def generate_ring_rules(code_max, n_max, n_generate, log_oper_choice=["and","or","not"]):
     rules = generate_stairway_rules(code_max, n_max, n_generate -1, log_oper_choice)
