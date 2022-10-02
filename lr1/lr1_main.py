@@ -8,41 +8,25 @@ def generate_simple_rules(code_max, n_max, n_generate, log_oper_choice=["and","o
         log_oper = choice(log_oper_choice)  #not means and-not (neither)
         if n_max < 2:
             n_max = 2
-        n_items = randint(2,n_max)
+        n_items = randint(2, n_max)
         items = []
-        for i in range(0,n_items):
-            items.append( randint(1,code_max) )
+        for i in range(0, n_items):
+            items.append(randint(1, code_max))
         rule = {
-              'if':{
+              'if': {
                   log_oper:	 items
                },
-               'then':code_max+j
+               'then': code_max+j
             }
         rules.append(rule)
     shuffle(rules)
     return(rules)
 
 
-def generate_stairway_rules(code_max, n_max, n_generate, log_oper_choice=["and","or","not"]):
-    rules = []
-    for j in range(0, n_generate):
-
-        log_oper = choice(log_oper_choice)  #not means and-not (neither)
-        if n_max < 2:
-            n_max = 2
-        n_items = randint(2,n_max)
-        items = []
-        for i in range(0,n_items):
-            items.append(i + j)
-        rule = {
-              'if':{
-                  log_oper:	 items
-               },
-               'then':i + j + 1
-            }
-        rules.append(rule)
-    shuffle(rules)
-    return(rules)
+def generate_seq_facts(M):
+    facts = list(range(0,M))
+    shuffle(facts)
+    return facts
 
 
 def generate_ring_rules(code_max, n_max, n_generate, log_oper_choice=["and","or","not"]):
