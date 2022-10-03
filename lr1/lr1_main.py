@@ -49,22 +49,23 @@ def generate_rand_facts(code_max, M):
 
 
 
-#samples:
-print(generate_simple_rules(100, 4, 10))
+if '__main__' == __name__:
+    print(generate_simple_rules(100, 4, 10))
 
 
-#generate rules and facts and check time
-time_start = time()
-N = 100000
-M = 1000
-rules = generate_simple_rules(100, 4, N)
-facts = generate_rand_facts(100, M)
-print("%d rules generated in %f seconds" % (N, time()-time_start))
+    #generate rules and facts and check time
+    time_start = time()
+    N = 100000
+    M = 1000
+    rules = generate_simple_rules(100, 4, N)
+    facts = generate_rand_facts(100, M)
+    print("%d rules generated in %f seconds" % (N, time()-time_start))
 
-time_start = time()
+    time_start = time()
 
-#time_result = time() - time_start
-#print(res)
-# YOUR CODE HERE
+    #time_result = time() - time_start
+    #print(res)
+    # YOUR CODE HERE
 
-#print("%d facts validated vs %d rules in %f seconds" % (M, N, time_result))
+    #print("%d facts validated vs %d rules in %f seconds" % (M, N, time_result))
+
