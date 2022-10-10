@@ -28,14 +28,12 @@ def generate_seq_facts(M):
     shuffle(facts)
     return facts
 
+
 def generate_rand_facts(code_max, M):
     facts = []
     for i in range(0, M):
         facts.append(randint(0, code_max))
     return facts
-
-
-
 
 
 def results(facts, rules):
@@ -71,7 +69,34 @@ def results(facts, rules):
                                                         'then': i['then']})
                                 facts.append(i['then'])
                                 fact.add(i['then'])
-
+            if j == 'and':
+                count = len(i['if'][j])
+                counter = 0
+                for atr in i['if'][j]:
+                    if atr in fact:
+                        counter = counter + 1
+                    else:
+                        break
+                if counter == count:
+                    if len(transit_results) == 0:
+                        fac = facts.copy()
+                        transit_results.append({'if': fac, 'and': i['if'][j], 'then': i['then']})
+                        facts.append(i['then'])
+                        fact.add(i['then'])
+                    else:
+                        put = True
+                        for mer in transit_results:
+                            if 'and' in mer:
+                                if (mer['and'] == i['if'][j] and mer['then'] != i['then']) or (
+                                        mer['and'] != i['if'][j] and mer['then'] == i['then']):
+                                    put = False
+                                    break
+                        if put is True:
+                            fac = facts.copy()
+                            transit_results.append({'if': fac, 'and': i['if'][j],
+                                                    'then': i['then']})
+                            facts.append(i['then'])
+                            fact.add(i['then'])
 
 
 
