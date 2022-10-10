@@ -2,38 +2,34 @@ from random import choice, shuffle, randint
 from time import time
 
 
-def generate_simple_rules(code_max, n_max, n_generate, log_oper_choice=["and","or","not"]):
-    rules = []
+def generate_simple_rules(code_max, n_max, n_generate,):
+    log_operation_choice = ["and", "or", "not"]
+    seq_rules = []
     for j in range(0, n_generate):
-        log_oper = choice(log_oper_choice)  #not means and-not (neither)
+        log_operation = choice(log_operation_choice)
         if n_max < 2:
             n_max = 2
         n_items = randint(2, n_max)
         items = []
         for i in range(0, n_items):
             items.append(randint(1, code_max))
-        rule = {
-              'if': {
-                  log_oper:	 items
-               },
-               'then': code_max+j
-            }
-        rules.append(rule)
-    shuffle(rules)
-    return(rules)
+        rule = {'if': {log_operation: items}, 'then': code_max + j}
+        seq_rules.append(rule)
+    shuffle(seq_rules)
+    return seq_rules
 
 
-def generate_seq_facts(M):
-    facts = list(range(0, M))
-    shuffle(facts)
-    return facts
+def generate_seq_facts(m):
+    seq_facts = list(range(0, m))
+    shuffle(seq_facts)
+    return seq_facts
 
 
-def generate_rand_facts(code_max, M):
-    facts = []
-    for i in range(0, M):
-        facts.append(randint(0, code_max))
-    return facts
+def generate_rand_facts(code_max, m):
+    seq_facts = []
+    for i in range(0, m):
+        seq_facts.append(randint(0, code_max))
+    return seq_facts
 
 
 def results(facts, rules):
@@ -78,7 +74,6 @@ def results(facts, rules):
                     else:
                         break
                 if counter == count:
-                    # interim_results.append([facts,i['then']])
                     if len(transit_results) == 0:
                         fac = facts.copy()
                         transit_results.append({'if': fac, 'not': i['if'][j], 'then': i['then']})
@@ -97,10 +92,6 @@ def results(facts, rules):
                             transit_results.append({'if': fac, 'not': i['if'][j], 'then': i['then']})
                             facts.append(i['then'])
                             fact.add(i['then'])
-
-
-
-
             if j == 'and':
                 count = len(i['if'][j])
                 counter = 0
@@ -138,7 +129,6 @@ def results(facts, rules):
                     else:
                         break
                 if counter == count:
-                    # interim_results.append([facts,i['then']])
                     if len(transit_results) == 0:
                         fac = facts.copy()
                         transit_results.append({'if': fac, 'not': i['if'][j], 'then': i['then']})
@@ -157,30 +147,19 @@ def results(facts, rules):
                             transit_results.append({'if': fac, 'not': i['if'][j], 'then': i['then']})
                             facts.append(i['then'])
                             fact.add(i['then'])
-
     return transit_results
-
-
-
-
-
 
 
 if '__main__' == __name__:
 
-
-    #print(generate_simple_rules(100, 4, 10000))
-
-
-    #generate rules and facts and check time
     time_start = time()
 
-    rules = generate_simple_rules(100, 4, 10000)
-    facts = generate_rand_facts(100, 1000)
+    total_rules = generate_simple_rules(100, 4, 10000)
+    total_facts = generate_rand_facts(100, 1000)
     print("%d rules generated in %f seconds" % (1000, time()-time_start))
 
     time_start = time()
-    result = results(facts, rules)
+    result = results(total_facts, total_rules)
     time_result = time() - time_start
     print(time_result)
 
