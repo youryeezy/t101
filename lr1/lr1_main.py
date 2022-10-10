@@ -38,8 +38,17 @@ def generate_rand_facts(code_max, M):
 
 
 
-
-
+def results(facts, rules):
+    fact = set(facts)
+    transit_results = []
+    for i in rules:
+        for j in i['if']:
+            if j == 'or':
+                for s in i['if'][j]:
+                    if s in fact:
+                        if len(transit_results) == 0:
+                            fac_tmp = facts.copy()
+                            
 
 
 
