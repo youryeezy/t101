@@ -48,8 +48,29 @@ def results(facts, rules):
                     if s in fact:
                         if len(transit_results) == 0:
                             fac_tmp = facts.copy()
-                            
-
+                            transit_results.append({'if': fac_tmp, 'or': i['if'][j],
+                                                    'then': i['then']})
+                            facts.append(i['then'])
+                            fact.add(i['then'])
+                            break
+                        else:
+                            put = True
+                            for ress in transit_results:
+                                if 'or' in ress:
+                                    if (ress['or'] == i['if'][j] and ress['then'] != i['then']) or (
+                                            ress['or'] != i['if'][j] and ress['then'] == i['then']):
+                                        put = False
+                                        break
+                                if 'and' in ress:
+                                    if (ress['and'] == i['if'][j]) and (ress['then'] != i['then']):
+                                        put = False
+                                        break
+                            if put is True:
+                                fac = facts.copy()
+                                transit_results.append({'if': fac, 'or': i['if'][j],
+                                                        'then': i['then']})
+                                facts.append(i['then'])
+                                fact.add(i['then'])
 
 
 
