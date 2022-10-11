@@ -1,5 +1,4 @@
-# T101
-<h3>LR1:</h3> 
+# LR1
 <p>  В папке lr1 присутствуют несколько файлов: generate_and_evaluate.py, Dockerfile, lr1_main.py.</p> 
 <p>  В файле generate_and_evaluate.py содержатся исходные функции генерации правил и фактов.</p>
 <p>  В файле Dockerfile описана инструкция для Dockerfile, необходимая для построения соответсвующего docker-образа.</p>
