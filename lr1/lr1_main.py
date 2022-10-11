@@ -120,33 +120,7 @@ def results(facts, rules):
                                                     'then': i['then']})
                             facts.append(i['then'])
                             fact.add(i['then'])
-            if j == 'not':
-                count = len(i['if'][j])
-                counter = 0
-                for s in i['if'][j]:
-                    if s not in fact:
-                        counter = counter + 1
-                    else:
-                        break
-                if counter == count:
-                    if len(transit_results) == 0:
-                        fac = facts.copy()
-                        transit_results.append({'if': fac, 'not': i['if'][j], 'then': i['then']})
-                        facts.append(i['then'])
-                        fact.add(i['then'])
-                    else:
-                        put = True
-                        for ress in transit_results:
-                            if 'not' in ress:
-                                if (ress['not'] == i['if'][j] and ress['then'] != i['then']) or (
-                                        ress['not'] != i['if'][j] and ress['then'] == i['then']):
-                                    put = False
-                                    break
-                        if put is True:
-                            fac = facts.copy()
-                            transit_results.append({'if': fac, 'not': i['if'][j], 'then': i['then']})
-                            facts.append(i['then'])
-                            fact.add(i['then'])
+
     return transit_results
 
 
