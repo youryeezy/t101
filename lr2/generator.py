@@ -34,7 +34,7 @@ def linear_regression_numpy(filename):
     time_end = time()
     print(f"polyfit in {time_end - time_start} seconds")
     # our hypothesis for give x
-    h =  model[0]*x + model[1]
+    h = model[0]*x + model[1]
 
     #and check if it's ok
     plt.title("Linear regression task")
@@ -47,8 +47,33 @@ def linear_regression_numpy(filename):
     return(model)
 
 def linear_regression_exact(filename):
+    with open(filename, 'r') as f:
+        data = np.loadtxt(f, delimiter=',')
+        # split to initial arrays
+    x, y = np.hsplit(data, 2)
+    # printing shapes is useful for debugging
+    tmp_x = np.hstack([np.ones((100, 1)), x])
+    trans_x = np.transpose(tmp_x)
+    res_thetha = np.linalg.matrix_power(trans_x.dot(tmp_x), -1).dot(trans_x).dot(y)
+    print(res_thetha)
+    print(np.shape(x))
+    print(np.shape(y))
+    # our model
+    time_start = time()
+
+
+    time_end = time()
+
+    h = res_thetha[1] * x + res_thetha[0]
     print("Ex1: your code here - exact solution usin invert matrix")
-    return
+    plt.title("Linear regression task")
+    plt.xlabel("X")
+    plt.ylabel("Y")
+    plt.plot(x, y, "b.", label='experiment')
+    plt.plot(x, h, "r", label='model')
+    plt.legend()
+    plt.show()
+    return res_thetha
     
 def check(model, ground_truth):
     if len(model) != len(ground_truth):
@@ -76,8 +101,8 @@ def generate_poly(a, n, noise, filename, size = 100):
     if len(a) != (n+1):
         print(f'ERROR: Length of polynomial coefficients ({len(a)}) must be the same as polynomial degree {n}')
         return
-    for i in range(0,n+1):
-        y = y + a[i] * np.power(x,i) + noise*(np.random.rand(size, 1) -0.5)
+    for i in range(0, n+1):
+        y = y + a[i] * np.power(x, i) + noise*(np.random.rand(size, 1) - 0.5)
     print(np.shape(x))
     data = np.hstack((x,y))
     np.savetxt(filename,data,delimiter=',')
@@ -141,7 +166,7 @@ def minimize(theta, x, y, L):
 
 if __name__ == "__main__":
     generate_linear(1,-3,1,'linear.csv',100)
-    model = linear_regression_numpy("linear.csv")
+    model = linear_regression_exact("linear.csv")
     print(f"Is model correct?\n{check(model, np.array([1,-3]))}")
     # ex1 . - exact solution
     #model_exact = linear_regression_exact("linear.csv")
