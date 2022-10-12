@@ -2,7 +2,7 @@ from random import choice, shuffle, randint
 from time import time
 
 
-def generate_simple_rules(code_max, n_max, n_generate,):
+def generate_simple_rules(code_max, n_max, n_generate):
     log_operation_choice = ["and", "or", "not"]
     seq_rules = []
     for j in range(0, n_generate):
@@ -17,12 +17,6 @@ def generate_simple_rules(code_max, n_max, n_generate,):
         seq_rules.append(rule)
     shuffle(seq_rules)
     return seq_rules
-
-
-def generate_seq_facts(m):
-    seq_facts = list(range(0, m))
-    shuffle(seq_facts)
-    return seq_facts
 
 
 def generate_rand_facts(code_max, m):
