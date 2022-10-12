@@ -51,6 +51,7 @@ def linear_regression_exact(filename):
         data = np.loadtxt(f, delimiter=',')
         # split to initial arrays
     x, y = np.hsplit(data, 2)
+    time_start = time()
     # printing shapes is useful for debugging
     tmp_x = np.hstack([np.ones((100, 1)), x])
     trans_x = np.transpose(tmp_x)
@@ -59,13 +60,11 @@ def linear_regression_exact(filename):
     print(np.shape(x))
     print(np.shape(y))
     # our model
-    time_start = time()
-
 
     time_end = time()
 
     h = res_thetha[1] * x + res_thetha[0]
-    print("Ex1: your code here - exact solution usin invert matrix")
+    print(f"Linear regression time:{time_end-time_start}")
     plt.title("Linear regression task")
     plt.xlabel("X")
     plt.ylabel("Y")
@@ -109,11 +108,37 @@ def generate_poly(a, n, noise, filename, size = 100):
 
 
 def polynomial_regression_numpy(filename):
-    print("Ex1: your code here")
+    with open(filename, 'r') as f:
+        data = np.loadtxt(f,delimiter=',')
+    #split to initial arrays
+    x, y = np.hsplit(data,2)
+    #printing shapes is useful for debugging
+    print(np.shape(x))
+    print(np.shape(y))
+    #our model
     time_start = time()
-    print("Ex1: your code here")
+    model = np.polyfit(np.transpose(x)[0], np.transpose(y)[0], 2)
     time_end = time()
     print(f"polyfit in {time_end - time_start} seconds")
+    # our hypothesis for give x
+    #h = model[0]*x*x + model[1]*x + model[2]
+
+    #and check if it's ok
+    plt.title("Linear regression task")
+    plt.xlabel("X")
+    plt.ylabel("Y")
+    plt.plot(x, y, "b.", label = 'experiment')
+    #x = np.linspace(-1, 1, 100)
+    x = np.sort(x, axis=0)
+    h = model[0] * x * x + model[1] * x + model[2]
+
+    plt.plot(x, h, "r", label='model')
+
+    plt.legend()
+    plt.show()
+    return model
+
+
     
 
 # Ex.2 gradient descent for linear regression without regularization
@@ -167,6 +192,7 @@ def minimize(theta, x, y, L):
 if __name__ == "__main__":
     generate_linear(1,-3,1,'linear.csv',100)
     model = linear_regression_exact("linear.csv")
+    poly_model = polynomial_regression_numpy("polynomial.csv")
     print(f"Is model correct?\n{check(model, np.array([1,-3]))}")
     # ex1 . - exact solution
     #model_exact = linear_regression_exact("linear.csv")
