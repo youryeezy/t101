@@ -121,7 +121,6 @@ def polynomial_regression_numpy(filename):
     time_end = time()
     print(f"polyfit in {time_end - time_start} seconds")
     # our hypothesis for give x
-    #h = model[0]*x*x + model[1]*x + model[2]
 
     #and check if it's ok
     plt.title("Linear regression task")
