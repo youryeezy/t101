@@ -64,21 +64,16 @@ def linear_regression_exact(filename):
     return res_thetha
     
 def check(model, ground_truth):
-    try:
-        if len(model) != len(ground_truth):
-            print("Model is inconsistent")
-            return False
+    if len(model) != len(ground_truth):
+        print("Model is inconsistent")
+        return False
+    else:
+        r = np.dot(model-ground_truth,model-ground_truth)/(np.dot(ground_truth,ground_truth))
+        print(r)
+        if r < 0.0001:
+            return True
         else:
-            r = np.dot(model-ground_truth,model-ground_truth)/(np.dot(ground_truth,ground_truth))
-            print(r)
-            if r < 0.0001:
-                return True
-            else:
-                return False
-    except:
-
-        
-
+            return False
 # Ex1: make the same with polynoms
 
 #generates x and y numpy arrays for 
