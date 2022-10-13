@@ -2,49 +2,39 @@ import numpy as np
 import matplotlib.pyplot as plt
 from time import time
 
-#generates x and y numpy arrays for 
-# y = a*x + b + a * noise
-# in range -1 .. 1
-# with random noise of given amplitude (noise)
-# vizualizes it and unloads to csv
+
 def generate_linear(a, b, noise, filename, size = 100):
     print('Generating random data y = a*x + b')
     x = 2 * np.random.rand(size, 1) - 1
-    y = a * x + b +  noise*a*(np.random.rand(size, 1) -0.5)
-    data = np.hstack((x,y))
-    np.savetxt(filename,data,delimiter=',')
-    return(x,y)
-
-
+    y = a * x + b +noise*a*(np.random.rand(size, 1) - 0.5)
+    data = np.hstack((x, y))
+    np.savetxt(filename, data, delimiter=',')
+    return(x, y)
 
 
 # thats an example of linear regression using polyfit
 def linear_regression_numpy(filename):
-    # now let's read it back
     with open(filename, 'r') as f:
-        data = np.loadtxt(f,delimiter=',')
-    #split to initial arrays
-    x,y = np.hsplit(data,2)
-    #printing shapes is useful for debugging
+        data = np.loadtxt(f, delimiter=',')
+    x, y = np.hsplit(data, 2)
     print(np.shape(x))
     print(np.shape(y))
-    #our model
+
     time_start = time()
     model = np.polyfit(np.transpose(x)[0], np.transpose(y)[0], 1)
     time_end = time()
     print(f"polyfit in {time_end - time_start} seconds")
-    # our hypothesis for give x
+
     h = model[0]*x + model[1]
 
-    #and check if it's ok
     plt.title("Linear regression task")
     plt.xlabel("X")
     plt.ylabel("Y")
-    plt.plot(x, y, "b.", label = 'experiment')
-    plt.plot(x, h, "r", label = 'model')    
+    plt.plot(x, y, "b.", label='experiment')
+    plt.plot(x, h, "r", label='model')
     plt.legend()
     plt.show()
-    return(model)
+    return model
 
 def linear_regression_exact(filename):
     with open(filename, 'r') as f:
@@ -59,7 +49,6 @@ def linear_regression_exact(filename):
     print(res_thetha)
     print(np.shape(x))
     print(np.shape(y))
-    # our model
 
     time_end = time()
 
@@ -75,16 +64,21 @@ def linear_regression_exact(filename):
     return res_thetha
     
 def check(model, ground_truth):
-    if len(model) != len(ground_truth):
-        print("Model is inconsistent")
-        return False
-    else:
-        r = np.dot(model-ground_truth,model-ground_truth)/(np.dot(ground_truth,ground_truth))
-        print(r)
-        if r < 0.0001:            
-            return True
-        else:
+    try:
+        if len(model) != len(ground_truth):
+            print("Model is inconsistent")
             return False
+        else:
+            r = np.dot(model-ground_truth,model-ground_truth)/(np.dot(ground_truth,ground_truth))
+            print(r)
+            if r < 0.0001:
+                return True
+            else:
+                return False
+    except:
+
+        
+
 # Ex1: make the same with polynoms
 
 #generates x and y numpy arrays for 
