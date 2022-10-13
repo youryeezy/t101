@@ -3,17 +3,16 @@ import matplotlib.pyplot as plt
 from time import time
 
 
-def generate_linear(a, b, noise, filename, size = 100):
+def generate_linear(a, b, noise, filename, size=100):  #generate x,y for linear
     print('Generating random data y = a*x + b')
     x = 2 * np.random.rand(size, 1) - 1
-    y = a * x + b +noise*a*(np.random.rand(size, 1) - 0.5)
+    y = a * x + b + noise * a * (np.random.rand(size, 1) - 0.5)
     data = np.hstack((x, y))
     np.savetxt(filename, data, delimiter=',')
     return(x, y)
 
 
-# thats an example of linear regression using polyfit
-def linear_regression_numpy(filename):
+def linear_regression_numpy(filename):  #linear regression with polyfit
     with open(filename, 'r') as f:
         data = np.loadtxt(f, delimiter=',')
     x, y = np.hsplit(data, 2)
@@ -36,13 +35,12 @@ def linear_regression_numpy(filename):
     plt.show()
     return model
 
-def linear_regression_exact(filename):
+
+def linear_regression_exact(filename):  #custom linear regression
     with open(filename, 'r') as f:
         data = np.loadtxt(f, delimiter=',')
-        # split to initial arrays
     x, y = np.hsplit(data, 2)
     time_start = time()
-    # printing shapes is useful for debugging
     tmp_x = np.hstack([np.ones((100, 1)), x])
     trans_x = np.transpose(tmp_x)
     res_thetha = np.linalg.matrix_power(trans_x.dot(tmp_x), -1).dot(trans_x).dot(y)
@@ -63,27 +61,22 @@ def linear_regression_exact(filename):
     plt.show()
     return res_thetha
     
+
 def check(model, ground_truth):
     if len(model) != len(ground_truth):
         print("Model is inconsistent")
         return False
     else:
-        r = np.dot(model-ground_truth,model-ground_truth)/(np.dot(ground_truth,ground_truth))
+        r = np.dot(model-ground_truth, model-ground_truth)/(np.dot(ground_truth, ground_truth))
         print(r)
-        if r < 0.0001:
+        if r < 0.0001:            
             return True
         else:
             return False
-# Ex1: make the same with polynoms
 
-#generates x and y numpy arrays for 
-# y = a_n*X^n + ... + a2*x^2 + a1*x + a0 + noise
-# in range -1 .. 1
-# with random noise of given amplitude (noise)
-# vizualizes it and unloads to csv
 def generate_poly(a, n, noise, filename, size = 100):
     x = 2 * np.random.rand(size, 1) - 1
-    y = np.zeros((size,1))
+    y = np.zeros((size, 1))
     print(np.shape(x))
     print(np.shape(y))
     if len(a) != (n+1):
@@ -92,31 +85,24 @@ def generate_poly(a, n, noise, filename, size = 100):
     for i in range(0, n+1):
         y = y + a[i] * np.power(x, i) + noise*(np.random.rand(size, 1) - 0.5)
     print(np.shape(x))
-    data = np.hstack((x,y))
-    np.savetxt(filename,data,delimiter=',')
+    data = np.hstack((x, y))
+    np.savetxt(filename, data, delimiter=',')
 
 
 def polynomial_regression_numpy(filename):
     with open(filename, 'r') as f:
-        data = np.loadtxt(f,delimiter=',')
-    #split to initial arrays
-    x, y = np.hsplit(data,2)
-    #printing shapes is useful for debugging
+        data = np.loadtxt(f, delimiter=',')
+    x, y = np.hsplit(data, 2)
     print(np.shape(x))
     print(np.shape(y))
-    #our model
     time_start = time()
     model = np.polyfit(np.transpose(x)[0], np.transpose(y)[0], 2)
     time_end = time()
     print(f"polyfit in {time_end - time_start} seconds")
-    # our hypothesis for give x
-
-    #and check if it's ok
     plt.title("Linear regression task")
     plt.xlabel("X")
     plt.ylabel("Y")
     plt.plot(x, y, "b.", label = 'experiment')
-    #x = np.linspace(-1, 1, 100)
     x = np.sort(x, axis=0)
     h = model[0] * x * x + model[1] * x + model[2]
 
