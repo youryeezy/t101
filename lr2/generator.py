@@ -1,3 +1,4 @@
+import numpy
 import numpy as np
 import matplotlib.pyplot as plt
 from time import time
@@ -69,7 +70,7 @@ def check(model, ground_truth):
     else:
         r = np.dot(model-ground_truth, model-ground_truth)/(np.dot(ground_truth, ground_truth))
         print(r)
-        if r < 0.0001:            
+        if r < 0.0001:
             return True
         else:
             return False
@@ -155,8 +156,8 @@ def minimize(theta, x, y, L):
     n = 12345 # <-- calculate it properly!
     theta = np.zeros(n) #you can try random initialization
     dJ = np.zeros(n)
-    for i in range(0,L):
-        theta = get_dJ(x,y,theta) # here you should try different gradient descents
+    for i in range(0, L):
+        theta = get_dJ(x, y, theta) # here you should try different gradient descents
         J = 0 # here you should calculate it properly
     #and plot J(i)
     print("your code goes here")
@@ -164,10 +165,13 @@ def minimize(theta, x, y, L):
 
 
 if __name__ == "__main__":
-    generate_linear(1,-3,1,'linear.csv',100)
-    model = linear_regression_exact("linear.csv")
+    generate_linear(1, -3, 1, 'linear.csv', 100)
+    model = np.squeeze(linear_regression_exact("linear.csv"))
     poly_model = polynomial_regression_numpy("polynomial.csv")
-    print(f"Is model correct?\n{check(model, np.array([1,-3]))}")
+    #print(f"Is model correct?\n{check(model, np.array([1,-3]))}")
+    mod1 = np.squeeze(numpy.asarray(np.array(([-3], [1]))))
+    print(f"Is model correct?\n{check(model, mod1)}")
+
     # ex1 . - exact solution
     #model_exact = linear_regression_exact("linear.csv")
     #check(model_exact, np.array([-3,1]))
