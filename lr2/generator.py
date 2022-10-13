@@ -70,7 +70,7 @@ def check(model, ground_truth):
     else:
         r = np.dot(model-ground_truth, model-ground_truth)/(np.dot(ground_truth, ground_truth))
         print(r)
-        if r < 0.0001:
+        if r < 0.001:
             return True
         else:
             return False
@@ -99,7 +99,7 @@ def polynomial_regression_numpy(filename):
     time_start = time()
     model = np.polyfit(np.transpose(x)[0], np.transpose(y)[0], 2)
     time_end = time()
-    print(f"polyfit in {time_end - time_start} seconds")
+    print(f"Polinomial regression with polyfit in {time_end - time_start} seconds")
     plt.title("Linear regression task")
     plt.xlabel("X")
     plt.ylabel("Y")
@@ -178,7 +178,7 @@ if __name__ == "__main__":
     
     #ex1. polynomial with numpy
     generate_poly([1,2,3],2,0.5, 'polynomial.csv')
-    polynomial_regression_numpy("polynomial.csv")
+    #polynomial_regression_numpy("polynomial.csv")
 
     #ex2. find minimum with gradient descent
     # 0. generate date with function above
