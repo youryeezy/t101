@@ -70,12 +70,13 @@ def check(model, ground_truth):
     else:
         r = np.dot(model-ground_truth, model-ground_truth)/(np.dot(ground_truth, ground_truth))
         print(r)
-        if r < 0.001:
+        if r < 0.0005:
             return True
         else:
             return False
 
-def generate_poly(a, n, noise, filename, size = 100):
+
+def generate_poly(a, n, noise, filename, size=100):
     x = 2 * np.random.rand(size, 1) - 1
     y = np.zeros((size, 1))
     print(np.shape(x))
@@ -103,7 +104,7 @@ def polynomial_regression_numpy(filename):
     plt.title("Linear regression task")
     plt.xlabel("X")
     plt.ylabel("Y")
-    plt.plot(x, y, "b.", label = 'experiment')
+    plt.plot(x, y, "b.", label='experiment')
     x = np.sort(x, axis=0)
     h = model[0] * x * x + model[1] * x + model[2]
 
@@ -114,27 +115,16 @@ def polynomial_regression_numpy(filename):
     return model
 
 
-    
-
-# Ex.2 gradient descent for linear regression without regularization
-
-# find minimum of function J(theta) using gradient descent
-# alpha - speed of descend
-# theta - vector of arguments, we're looking for the optimal ones (shape is 1 х N)
-# J(theta) function which is being minimizing over theta (shape is 1 x 1 - scalar)
-# dJ(theta) - gradient, i.e. partial derivatives of J over theta - dJ/dtheta_i (shape is 1 x N - the same as theta)
-# x and y are both vectors
-
 def gradient_descent_step(dJ, theta, alpha):
-    print("your code goes here")
+    theta_new = theta - alpha * 1/60 * dJ
+    return theta_new
 
-    return(theta)
 
-# get gradient over all xy dataset - gradient descent
 def get_dJ(x, y, theta):
-    theta_new = theta
-    print("your code goes here - calculate new theta")
-    return theta_new   
+    h = theta.dot(x.transpose())
+    dJ = (h - y).dot(x)
+    return dJ
+
 
 # get gradient over all minibatch of size M of xy dataset - minibatch gradient descent
 def get_dJ_minibatch(x, y, theta, M):
@@ -142,24 +132,26 @@ def get_dJ_minibatch(x, y, theta, M):
     print("your code goes here - calculate new theta")
     return theta_new     
 
+
 # get gradient over all minibatch of single sample from xy dataset - stochastic gradient descent
 def get_dJ_sgd(x, y, theta):
     theta_new = theta
     print("your code goes here - calculate new theta")
     return theta_new     
 
+
 # try each of gradient decsent (complete, minibatch, sgd) for varius alphas
 # L - number of iterations
 # plot results as J(i)
-def minimize(theta, x, y, L):
-    #n - number of samples in learning subset, m - ...
-    n = 12345 # <-- calculate it properly!
-    theta = np.zeros(n) #you can try random initialization
-    dJ = np.zeros(n)
+def minimize(x, y, L):
+    # n - number of samples in learning subset, m - ...
+    n = 2  # <-- calculate it properly!
+    theta = np.ones(n)  # you can try random initialization
+    # dJ = np.zeros(n)
     for i in range(0, L):
-        theta = get_dJ(x, y, theta) # here you should try different gradient descents
-        J = 0 # here you should calculate it properly
-    #and plot J(i)
+        theta = get_dJ(x, y, theta)  # here you should try different gradient descents
+        J = 0  # here you should calculate it properly
+    # and plot J(i)
     print("your code goes here")
     return
 
@@ -168,25 +160,33 @@ if __name__ == "__main__":
     generate_linear(1, -3, 1, 'linear.csv', 100)
     model = np.squeeze(linear_regression_exact("linear.csv"))
     poly_model = polynomial_regression_numpy("polynomial.csv")
-    #print(f"Is model correct?\n{check(model, np.array([1,-3]))}")
+    # print(f"Is model correct?\n{check(model, np.array([1,-3]))}")
     mod1 = np.squeeze(numpy.asarray(np.array(([-3], [1]))))
     print(f"Is model correct?\n{check(model, mod1)}")
 
     # ex1 . - exact solution
-    #model_exact = linear_regression_exact("linear.csv")
-    #check(model_exact, np.array([-3,1]))
+    # model_exact = linear_regression_exact("linear.csv")
+    # check(model_exact, np.array([-3,1]))
     
-    #ex1. polynomial with numpy
-    generate_poly([1,2,3],2,0.5, 'polynomial.csv')
-    #polynomial_regression_numpy("polynomial.csv")
+    # ex1. polynomial with numpy
+    generate_poly([1, 2, 3], 2, 0.5, 'polynomial.csv')
+    # polynomial_regression_numpy("polynomial.csv")
 
-    #ex2. find minimum with gradient descent
+    # ex2. find minimum with gradient descent
     # 0. generate date with function above
+    generate_linear(1, -3, 1, 'linear.csv', 100)
     # 1. shuffle data into train - test - valid
+    with open('linear.csv', 'r') as f:
+        data = np.loadtxt(f, delimiter=',')
+    train_data = data[:60]
+    train_x, train_y = np.hsplit(train_data, 2)
+    test_data = data[60::1]
+    valid_data = data[80::1]
     # 2. call minuimize(...) and plot J(i)
+    minimize(train_x, train_y, 10)
     # 3. call check(theta1, theta2) to check results for optimal theta
     
-    #ex3. polinomial regression
+    # ex3. polinomial regression
     # 0. generate date with function generate_poly for degree=3, use size = 10, 20, 30, ... 100
     # for each size:
     # 1. shuffle data into train - test - valid
