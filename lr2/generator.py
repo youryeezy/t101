@@ -138,18 +138,58 @@ def get_dJ_sgd(x, y, theta):
     return dJ
 
 
-
 def minimize(x, y, L):
+    alpha = 0.15
     # n - number of samples in learning subset, m - ...
     n = 2  # <-- calculate it properly!
-    theta = np.ones(n)  # you can try random initialization
-    # dJ = np.zeros(n)
+    theta = np.ones((1, n))  # you can try random initialization
     for i in range(0, L):
-        theta = get_dJ(x, y, theta)  # here you should try different gradient descents
-        J = 0  # here you should calculate it properly
-    # and plot J(i)
-    print("your code goes here")
+        dJ = get_dJ(x, y, theta)  # here you should try different gradient descents
+        theta = gradient_descent_step(dJ, theta, alpha)
+        alpha -= 0.0002
+        h = theta.dot(x.transpose())
+        J = 1 / 120 * (np.square(h - y)).sum(axis=1)  # here you should calculate it properly
+        plt.plot(i, J, "b.")
+    plt.legend()
+    plt.show()
     return
+
+def minimize_minibatch(x, y, L, M):  # M-size minibatch
+    alpha = 0.15
+    n = 2  # <-- calculate it properly!
+    theta = np.ones((1, n))  # you can try random initialization
+    x = np.vsplit(x, np.shape(x)[0] / M)
+    y = np.hsplit(y, np.shape(y)[1] / M)
+    for i in range(0, L):
+        for x_minib, y_minib in list(zip(x, y)):
+            dJ = get_dJ_minibatch(x_minib, y_minib, theta)  # here you should try different gradient descents
+            theta = gradient_descent_step(dJ, theta, alpha)
+            alpha -= 0.00002
+            h = theta.dot(x_minib.transpose())
+            J = 1 / 120 * (np.square(h - y_minib)).sum(axis=1)  # here you should calculate it properly
+        plt.plot(i, J, "b.")
+    plt.legend()
+    plt.show()
+    return theta
+
+
+def minimize_sgd(x, y, L):
+    alpha = 0.30
+    n = 2  # <-- calculate it properly!
+    theta = np.ones((1, n))  # you can try random initialization
+    for iter in range(0, L):
+        for i, line in enumerate(x):
+            one_y = np.reshape(y[0][i], (1, 1))
+            line = line.reshape((1, 2))
+            dJ = get_dJ_sgd(line, one_y, theta)  # here you should try different gradient descents
+            theta = gradient_descent_step(dJ, theta, alpha)
+            alpha -= 0.00002
+            h = theta.dot(line.transpose())
+            J = 1/120 * (np.square(h - one_y))  # here you should calculate it properly
+        plt.plot(iter, J, "b.")
+    plt.legend()
+    plt.show()
+    return theta
 
 
 if __name__ == "__main__":
@@ -175,11 +215,18 @@ if __name__ == "__main__":
     with open('linear.csv', 'r') as f:
         data = np.loadtxt(f, delimiter=',')
     train_data = data[:60]
-    train_x, train_y = np.hsplit(train_data, 2)
     test_data = data[60::1]
     valid_data = data[80::1]
+    x, y = np.hsplit(train_data, 2)
+    one_col = np.ones((60, 1))
+    x = np.hstack([one_col, x])
     # 2. call minuimize(...) and plot J(i)
-    minimize(train_x, train_y, 10)
+    y = y.transpose()
+    print(minimize(x, y, 100))
+
+    print(minimize_sgd(x, y, 50))
+
+    print(minimize_minibatch(x, y, 60, 5))
     # 3. call check(theta1, theta2) to check results for optimal theta
     
     # ex3. polinomial regression
