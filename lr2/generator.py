@@ -126,23 +126,19 @@ def get_dJ(x, y, theta):
     return dJ
 
 
-# get gradient over all minibatch of size M of xy dataset - minibatch gradient descent
-def get_dJ_minibatch(x, y, theta, M):
-    theta_new = theta
-    print("your code goes here - calculate new theta")
-    return theta_new     
+def get_dJ_minibatch(x, y, theta):
+    h = theta.dot(x.transpose())
+    dJ = (h - y).dot(x)
+    return dJ
 
 
-# get gradient over all minibatch of single sample from xy dataset - stochastic gradient descent
 def get_dJ_sgd(x, y, theta):
-    theta_new = theta
-    print("your code goes here - calculate new theta")
-    return theta_new     
+    h = theta.dot(x.transpose())
+    dJ = (h - y).dot(x)
+    return dJ
 
 
-# try each of gradient decsent (complete, minibatch, sgd) for varius alphas
-# L - number of iterations
-# plot results as J(i)
+
 def minimize(x, y, L):
     # n - number of samples in learning subset, m - ...
     n = 2  # <-- calculate it properly!
