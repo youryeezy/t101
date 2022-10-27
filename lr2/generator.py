@@ -126,6 +126,9 @@ def get_dJ(x, y, theta):
     return dJ
 
 
+
+
+
 def minimize(x, y, L):
     alpha = 0.15
     # n - number of samples in learning subset, m - ...
@@ -184,14 +187,16 @@ if __name__ == "__main__":
     generate_linear(1, -3, 1, 'linear.csv', 100)
     model = np.squeeze(linear_regression_exact("linear.csv"))
     poly_model = polynomial_regression_numpy("polynomial.csv")
-
+    # print(f"Is model correct?\n{check(model, np.array([1,-3]))}")
     mod1 = np.squeeze(numpy.asarray(np.array(([-3], [1]))))
     print(f"Is model correct?\n{check(model, mod1)}")
 
 
+    generate_poly([1, 2, 3], 2, 0.5, 'polynomial.csv')
 
-    #generate_poly([1, 2, 3], 2, 0.5, 'polynomial.csv')
+
     generate_linear(1, -3, 1, 'linear.csv', 100)
+
     with open('linear.csv', 'r') as f:
         data = np.loadtxt(f, delimiter=',')
     train_data = data[:77]
@@ -206,3 +211,17 @@ if __name__ == "__main__":
     print(minimize_sgd(x, y, 50))
 
     print(minimize_minibatch(x, y, 77, 5))
+    # 3. call check(theta1, theta2) to check results for optimal theta
+
+    # ex3. polinomial regression
+    # 0. generate date with function generate_poly for degree=3, use size = 10, 20, 30, ... 100
+    # for each size:
+    # 1. shuffle data into train - test - valid
+    # Now we're going to try different degrees of model to aproximate our data, set degree=1 (linear regression)
+    # 2. call minimize(...) and plot J(i)
+    # 3. call check(theta1, theta2) to check results for optimal theta
+    # 4. plot min(J_train), min(J_test) vs size: is it overfit or underfit?
+    #
+    # repeat 0-4 for degres = 2,3,4
+
+    # ex3* the same with regularization
