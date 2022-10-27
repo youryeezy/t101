@@ -126,18 +126,6 @@ def get_dJ(x, y, theta):
     return dJ
 
 
-def get_dJ_minibatch(x, y, theta):
-    h = theta.dot(x.transpose())
-    dJ = (h - y).dot(x)
-    return dJ
-
-
-def get_dJ_sgd(x, y, theta):
-    h = theta.dot(x.transpose())
-    dJ = (h - y).dot(x)
-    return dJ
-
-
 def minimize(x, y, L):
     alpha = 0.15
     # n - number of samples in learning subset, m - ...
@@ -148,7 +136,7 @@ def minimize(x, y, L):
         theta = gradient_descent_step(dJ, theta, alpha)
         alpha -= 0.0002
         h = theta.dot(x.transpose())
-        J = 1 / 120 * (np.square(h - y)).sum(axis=1)  # here you should calculate it properly
+        J = 1 / 144 * (np.square(h - y)).sum(axis=1)  # here you should calculate it properly
         plt.plot(i, J, "b.")
     plt.legend()
     plt.show()
@@ -162,11 +150,11 @@ def minimize_minibatch(x, y, L, M):  # M-size minibatch
     y = np.hsplit(y, np.shape(y)[1] / M)
     for i in range(0, L):
         for x_minib, y_minib in list(zip(x, y)):
-            dJ = get_dJ_minibatch(x_minib, y_minib, theta)  # here you should try different gradient descents
+            dJ = get_dJ(x_minib, y_minib, theta)  # here you should try different gradient descents
             theta = gradient_descent_step(dJ, theta, alpha)
             alpha -= 0.00002
             h = theta.dot(x_minib.transpose())
-            J = 1 / 120 * (np.square(h - y_minib)).sum(axis=1)  # here you should calculate it properly
+            J = 1 / 144 * (np.square(h - y_minib)).sum(axis=1)  # here you should calculate it properly
         plt.plot(i, J, "b.")
     plt.legend()
     plt.show()
@@ -181,11 +169,11 @@ def minimize_sgd(x, y, L):
         for i, line in enumerate(x):
             one_y = np.reshape(y[0][i], (1, 1))
             line = line.reshape((1, 2))
-            dJ = get_dJ_sgd(line, one_y, theta)  # here you should try different gradient descents
+            dJ = get_dJ(line, one_y, theta)  # here you should try different gradient descents
             theta = gradient_descent_step(dJ, theta, alpha)
             alpha -= 0.00002
             h = theta.dot(line.transpose())
-            J = 1/120 * (np.square(h - one_y))  # here you should calculate it properly
+            J = 1/144 * (np.square(h - one_y))  # here you should calculate it properly
         plt.plot(iter, J, "b.")
     plt.legend()
     plt.show()
@@ -196,49 +184,25 @@ if __name__ == "__main__":
     generate_linear(1, -3, 1, 'linear.csv', 100)
     model = np.squeeze(linear_regression_exact("linear.csv"))
     poly_model = polynomial_regression_numpy("polynomial.csv")
-    # print(f"Is model correct?\n{check(model, np.array([1,-3]))}")
+
     mod1 = np.squeeze(numpy.asarray(np.array(([-3], [1]))))
     print(f"Is model correct?\n{check(model, mod1)}")
 
-    # ex1 . - exact solution
-    # model_exact = linear_regression_exact("linear.csv")
-    # check(model_exact, np.array([-3,1]))
-    
-    # ex1. polynomial with numpy
-    generate_poly([1, 2, 3], 2, 0.5, 'polynomial.csv')
-    # polynomial_regression_numpy("polynomial.csv")
 
-    # ex2. find minimum with gradient descent
-    # 0. generate date with function above
+
+    #generate_poly([1, 2, 3], 2, 0.5, 'polynomial.csv')
     generate_linear(1, -3, 1, 'linear.csv', 100)
-    # 1. shuffle data into train - test - valid
     with open('linear.csv', 'r') as f:
         data = np.loadtxt(f, delimiter=',')
-    train_data = data[:60]
-    test_data = data[60::1]
-    valid_data = data[80::1]
+    train_data = data[:77]
+
     x, y = np.hsplit(train_data, 2)
-    one_col = np.ones((60, 1))
+    one_col = np.ones((77, 1))
     x = np.hstack([one_col, x])
-    # 2. call minuimize(...) and plot J(i)
+
     y = y.transpose()
     print(minimize(x, y, 100))
 
     print(minimize_sgd(x, y, 50))
 
-    print(minimize_minibatch(x, y, 60, 5))
-    # 3. call check(theta1, theta2) to check results for optimal theta
-    
-    # ex3. polinomial regression
-    # 0. generate date with function generate_poly for degree=3, use size = 10, 20, 30, ... 100
-    # for each size:
-    # 1. shuffle data into train - test - valid
-    # Now we're going to try different degrees of model to aproximate our data, set degree=1 (linear regression)
-    # 2. call minimize(...) and plot J(i)
-    # 3. call check(theta1, theta2) to check results for optimal theta
-    # 4. plot min(J_train), min(J_test) vs size: is it overfit or underfit?
-    # 
-    # repeat 0-4 for degres = 2,3,4
-
-    # ex3* the same with regularization
-    
+    print(minimize_minibatch(x, y, 77, 5))
